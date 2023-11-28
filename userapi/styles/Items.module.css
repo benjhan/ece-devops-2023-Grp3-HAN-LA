@@ -1,0 +1,26 @@
+.itemsContainer {
+    padding: 20px;
+  }
+  
+  .itemsList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .item {
+    background-color: #f0f0f0; /* Couleur de fond gris clair */
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px; /* Bord arrondi pour le cadre */
+    transition: background-color 0.3s;
+  }
+  
+  .item a {
+    text-decoration: none;
+    color: black; /* Couleur du texte */
+  }
+  
+  .item:hover {
+    background-color: #e0e0e0; /* Changement de couleur au survol */
+  }
+  

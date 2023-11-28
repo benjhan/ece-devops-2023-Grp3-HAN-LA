@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 const Redis = require('ioredis');
 const redis = new Redis({
-  host: 'localhost',
+  host: '127.0.0.1',
   port: 6379, // Le port par défaut de Redis
 });
 
