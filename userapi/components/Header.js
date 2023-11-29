@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <div style={{ backgroundColor: '#d3e4b7' }} className="p-4 shadow-md fixed top-0 left-0 right-0 z-50">
+    <div style={{ backgroundColor: '#d3e4b7' }} className="shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img src="/pepegym_logo.png" alt="Logo PepeGYM" className="w-20 h-20" />
