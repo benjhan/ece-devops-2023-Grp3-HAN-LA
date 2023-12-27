@@ -1,11 +1,14 @@
-// controllers/user.js
+const { createClient } = require("redis");
+const db = createClient({
+  // Votre configuration de connexion ici
+});
 
-const db = require('../dbClient');
+db.connect();
 
 module.exports = {
-  create: (user, callback) => {
+  create: async (user) => {
     if (!user.username) {
-      return callback(new Error('Wrong user parameters'), null);
+      throw new Error('Wrong user parameters');
     }
 
     const userObj = {
@@ -13,68 +16,65 @@ module.exports = {
       lastname: user.lastname,
     };
 
-    db.hgetall(user.username, (err, res) => {
-      if (err) return callback(err, null);
-
-      if (!res) {
-        db.hmset(user.username, userObj, (err, result) => {
-          if (err) return callback(err, null);
-          callback(null, result);
-        });
+    try {
+      const res = await db.hGetAll(user.username);
+      if (Object.keys(res).length === 0) {
+        await db.hSet(user.username, userObj);
+        return "User created";
       } else {
-        callback(new Error('User already exists'), null);
+        throw new Error('User already exists');
       }
-    });
+    } catch (err) {
+      throw err;
+    }
   },
 
-  get: (username, callback) => {
+  get: async (username) => {
     if (!username) {
-      return callback(new Error('Username must be provided'), null);
+      throw new Error('Username must be provided');
     }
 
-    db.hgetall(username, (err, result) => {
-      if (err) return callback(err, null);
-
-      if (result) {
-        callback(null, result);
+    try {
+      const result = await db.hGetAll(username);
+      if (Object.keys(result).length === 0) {
+        throw new Error("User doesn't exist");
       } else {
-        callback(new Error("User doesn't exist"), null);
+        return result;
       }
-    });
+    } catch (err) {
+      throw err;
+    }
   },
 
-  delete: (username, callback) => {
-    // Supprimer l'utilisateur avec le nom d'utilisateur spécifié
-    db.del(username, (err, res) => {
-      if (err) {
-        return callback(err, null);
-      }
-
-      callback(null, res);
-    });
-  },
-
-  update: (username, newData, callback) => {
+  delete: async (username) => {
     if (!username) {
-      return callback(new Error('Username must be provided'), null);
+      throw new Error('Username must be provided');
     }
 
-    db.hgetall(username, (err, existingData) => {
-      if (err) return callback(err, null);
+    try {
+      const res = await db.del(username);
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  },
 
-      if (!existingData) {
-        return callback(new Error("User doesn't exist"), null);
+  update: async (username, newData) => {
+    if (!username) {
+      throw new Error('Username must be provided');
+    }
+
+    try {
+      const existingData = await db.hGetAll(username);
+      if (Object.keys(existingData).length === 0) {
+        throw new Error("User doesn't exist");
       }
 
-      // Mettre à jour les champs spécifiés dans newData
       const updatedData = { ...existingData, ...newData };
-
-      // Mettre à jour l'entrée dans la base de données
-      db.hmset(username, updatedData, (err, result) => {
-        if (err) return callback(err, null);
-        callback(null, result);
-      });
-    });
+      await db.hSet(username, updatedData);
+      return "User updated";
+    } catch (err) {
+      throw err;
+    }
   },
-
 };
