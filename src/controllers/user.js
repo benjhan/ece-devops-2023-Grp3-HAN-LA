@@ -6,9 +6,9 @@ const db = createClient({
 db.connect();
 
 module.exports = {
-  create: (user) => {
+  create: async (user) => {
     if (!user.username) {
-      return Promise.reject(new Error('Wrong user parameters'));
+      throw new Error('Wrong user parameters');
     }
 
     const userObj = {
@@ -16,49 +16,65 @@ module.exports = {
       lastname: user.lastname,
     };
 
-    return db.hGetAll(user.username).then((res) => {
+    try {
+      const res = await db.hGetAll(user.username);
       if (Object.keys(res).length === 0) {
-        return db.hSet(user.username, userObj).then(() => "User created");
+        await db.hSet(user.username, userObj);
+        return "User created";
       } else {
-        return Promise.reject(new Error('User already exists'));
+        throw new Error('User already exists');
       }
-    });
+    } catch (err) {
+      throw err;
+    }
   },
 
-  get: (username) => {
+  get: async (username) => {
     if (!username) {
-      return Promise.reject(new Error('Username must be provided'));
+      throw new Error('Username must be provided');
     }
 
-    return db.hGetAll(username).then((result) => {
+    try {
+      const result = await db.hGetAll(username);
       if (Object.keys(result).length === 0) {
-        return Promise.reject(new Error("User doesn't exist"));
+        throw new Error("User doesn't exist");
       } else {
         return result;
       }
-    });
+    } catch (err) {
+      throw err;
+    }
   },
 
-  delete: (username) => {
+  delete: async (username) => {
     if (!username) {
-      return Promise.reject(new Error('Username must be provided'));
+      throw new Error('Username must be provided');
     }
 
-    return db.del(username).then((res) => res);
+    try {
+      const res = await db.del(username);
+      return res;
+    } catch (err) {
+      throw err;
+    }
   },
 
-  update: (username, newData) => {
+  update: async (username, newData) => {
     if (!username) {
-      return Promise.reject(new Error('Username must be provided'));
+      throw new Error('Username must be provided');
     }
 
-    return db.hGetAll(username).then((existingData) => {
+    try {
+      const existingData = await db.hGetAll(username);
       if (Object.keys(existingData).length === 0) {
-        return Promise.reject(new Error("User doesn't exist"));
+        throw new Error("User doesn't exist");
       }
 
       const updatedData = { ...existingData, ...newData };
-      return db.hSet(username, updatedData).then(() => "User updated");
-    });
+      await db.hSet(username, updatedData);
+      return "User updated";
+    } catch (err) {
+      throw err;
+    }
   },
 };
