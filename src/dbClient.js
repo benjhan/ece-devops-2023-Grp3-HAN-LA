@@ -1,5 +1,4 @@
 var redis = require("redis");
-require('dotenv').config();
 
 const cacheHostName = process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME;
 const cachePassword = process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY;
