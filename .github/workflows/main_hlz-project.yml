@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Set up Environment Variables for Build
+        run: |
+          echo "AZURE_CACHE_FOR_REDIS_HOST_NAME=${{ secrets.AZURE_CACHE_FOR_REDIS_HOST_NAME }}" >> $GITHUB_ENV
+          echo "AZURE_CACHE_FOR_REDIS_ACCESS_KEY=${{ secrets.AZURE_CACHE_FOR_REDIS_ACCESS_KEY }}" >> $GITHUB_ENV
+
       - name: npm install, build, and test
         run: |
           npm install
@@ -52,6 +57,11 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: 'Set up Environment Variables'
+        run: |
+          echo "AZURE_CACHE_FOR_REDIS_HOST_NAME=${{ secrets.AZURE_CACHE_FOR_REDIS_HOST_NAME }}" >> $GITHUB_ENV
+          echo "AZURE_CACHE_FOR_REDIS_ACCESS_KEY=${{ secrets.AZURE_CACHE_FOR_REDIS_ACCESS_KEY }}" >> $GITHUB_ENV
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -60,3 +70,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2D6E9D3266E54FDFAB165820D8069A95 }}
           package: .
+        env:
+          AZURE_CACHE_FOR_REDIS_HOST_NAME: ${{ secrets.AZURE_CACHE_FOR_REDIS_HOST_NAME }}
+          AZURE_CACHE_FOR_REDIS_ACCESS_KEY: ${{ secrets.AZURE_CACHE_FOR_REDIS_ACCESS_KEY }}
