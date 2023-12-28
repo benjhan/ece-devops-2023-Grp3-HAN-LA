@@ -1,41 +1,57 @@
+// routes/user.js
+
 const express = require("express");
 const userController = require("../controllers/user");
 
 const userRouter = express.Router();
 
 userRouter
-  .post("/", async (req, res) => {
-    try {
-      const result = await userController.create(req.body);
-      res.status(201).json({ status: "success", msg: result });
-    } catch (err) {
-      res.status(400).json({ status: "error", msg: err.message });
-    }
+  .post("/", (req, res) => {
+    userController.create(req.body, (err, result) => {
+      const respObj = {
+        status: err ? "error" : "success",
+        msg: err ? err.message : result,
+      };
+
+      res.status(err ? 400 : 201).json(respObj);
+    });
   })
-  .get("/:username", async (req, res) => {
-    try {
-      const result = await userController.get(req.params.username);
-      res.status(200).json({ status: "success", msg: result });
-    } catch (err) {
-      res.status(400).json({ status: "error", msg: err.message });
-    }
+  .get("/:username", (req, res) => {
+    const username = req.params.username;
+
+    userController.get(username, (err, result) => {
+      const respObj = {
+        status: err ? "error" : "success",
+        msg: err ? err.message : result,
+      };
+
+      res.status(err ? 400 : 200).json(respObj);
+    });
   })
-  .put("/:username", async (req, res) => {
-    try {
-      const { firstname, lastname } = req.body;
-      await userController.update(req.params.username, { firstname, lastname });
-      res.status(200).json({ status: "success", msg: `User ${req.params.username} updated` });
-    } catch (err) {
-      res.status(400).json({ status: "error", msg: err.message });
-    }
+  .put("/:username", (req, res) => {
+    const username = req.params.username;
+    const { firstname, lastname } = req.body;
+
+    userController.update(username, { firstname, lastname }, (err, result) => {
+      const respObj = {
+        status: err ? "error" : "success",
+        msg: err ? err.message : `User ${username} updated`,
+      };
+
+      res.status(err ? 400 : 200).json(respObj);
+    });
   })
-  .delete("/:username", async (req, res) => {
-    try {
-      await userController.delete(req.params.username);
-      res.status(200).json({ status: "success", msg: `User ${req.params.username} deleted` });
-    } catch (err) {
-      res.status(400).json({ status: "error", msg: err.message });
-    }
+  .delete("/:username", (req, res) => {
+    const username = req.params.username;
+
+    userController.delete(username, (err, result) => {
+      const respObj = {
+        status: err ? "error" : "success",
+        msg: err ? err.message : `User ${username} deleted`,
+      };
+
+      res.status(err ? 400 : 200).json(respObj);
+    });
   });
 
 module.exports = userRouter;

@@ -24,7 +24,6 @@
         <div id="createMessage"></div>
       </form>
 
-
       <form id="searchForm">
         <h1>Search for a User</h1>
         <label for="searchUsername">Search by Username:</label>
@@ -41,7 +40,6 @@
         <div id="deleteMessage"></div>
       </form>
 
-      
       <form id="updateForm">
         <h1>Update User</h1>
         <label for="updateUsername">Username to Update:</label>
@@ -56,7 +54,6 @@
         <button type="button" onclick="updateUser()">Update</button>
         <div id="updateMessage"></div>
       </form>
-        
     </div>
 
     <script>
@@ -100,14 +97,22 @@
 
       function deleteUser() {
         const deleteUsername = document.getElementById("deleteUsername").value;
-        fetch(`/user/${deleteUsername}`, { method: "DELETE" })
+        fetch(`/user/${deleteUsername}`, {
+          method: "DELETE",
+          cache: "no-store",
+        })
           .then((response) => response.json())
           .then((data) => {
             const deleteMessage = document.getElementById("deleteMessage");
-            deleteMessage.innerHTML =
-              data.status === "success"
-                ? "User deleted successfully."
-                : data.msg;
+            if (data.status === "success") {
+              if (data.msg === "User not found") {
+                deleteMessage.innerHTML = "User not found.";
+              } else {
+                deleteMessage.innerHTML = "User deleted successfully.";
+              }
+            } else {
+              deleteMessage.innerHTML = data.msg;
+            }
           })
           .catch((error) => console.error("Error:", error));
       }

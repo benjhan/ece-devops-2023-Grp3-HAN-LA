@@ -1,23 +1,21 @@
-var redis = require("redis");
 require('dotenv').config();
 
-const cacheHostName = process.env.AZURE_CACHE_FOR_REDIS_HOST_NAME;
-const cachePassword = process.env.AZURE_CACHE_FOR_REDIS_ACCESS_KEY;
+const { expect } = require('chai');
+let db;
 
-if (!cacheHostName) throw Error("AZURE_CACHE_FOR_REDIS_HOST_NAME is empty");
-if (!cachePassword) throw Error("AZURE_CACHE_FOR_REDIS_ACCESS_KEY is empty");
+describe('Redis', () => {
+  before(() => {
+    db = require('../src/dbClient');
+  });
 
-var db = redis.createClient({
-  url: `rediss://${cacheHostName}:6380`, // Utilisez `rediss://` pour TLS
-  password: cachePassword,
-  tls: {}, // Pour une connexion sécurisée (TLS)
-  retry_strategy: () => new Error("Retry time exhausted")
+  it('should connect to Redis', (done) => {
+    // Utilisez l'événement 'connect' pour vérifier la connexion réussie
+    db.on('connect', () => {
+      console.log('Connected to Redis in the test');
+      expect(true).to.eql(true); // Vous pouvez ajuster cette assertion en fonction de vos besoins
+      done();
+    });
+  });
+
+  // ... Autres tests Redis ...
 });
-
-db.connect();
-
-process.on('SIGINT', function() {
-  db.quit();
-});
-
-module.exports = db;
