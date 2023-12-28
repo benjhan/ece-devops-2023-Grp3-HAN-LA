@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config
+data:
+  # Clés et valeurs de configuration non sensibles
+  exemple-config1: "valeur1"
+  exemple-config2: "valeur2"

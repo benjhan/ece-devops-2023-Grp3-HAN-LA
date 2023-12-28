@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app-container
+        image: bensaebe/my_app
+        ports:
+        - containerPort: 3000
+        env:
+          - name: AZURE_CACHE_FOR_REDIS_HOST_NAME
+            valueFrom:
+              secretKeyRef:
+                name: redis-secret
+                key: AZURE_CACHE_FOR_REDIS_HOST_NAME
+          - name: AZURE_CACHE_FOR_REDIS_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: redis-secret
+                key: AZURE_CACHE_FOR_REDIS_ACCESS_KEY
