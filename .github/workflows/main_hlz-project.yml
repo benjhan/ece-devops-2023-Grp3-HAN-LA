@@ -58,5 +58,4 @@ jobs:
         with:
           app-name: 'HLZ-Project'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2D6E9D3266E54FDFAB165820D8069A95 }}
           package: .
