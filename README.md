@@ -1,20 +1,22 @@
-# ece-devops-2023-Grp3-HAN-LA-ZOUCH
-
-  
+# ECE DevOps 2023 - Group 3 (HAN, LA, ZOUCH)
 
 ## Description
 
-  
+This repository showcases the work and projects completed by Group 3 for the DevOps course in our ING4 year at ECE. It includes a range of labs and a comprehensive end-of-year project that involves developing a web application using a specific programming language, implementing a database for data storage, and ensuring quality through multiple testing levels.
 
-This repository contains the work and projects completed for the DevOps course during our ING4 year at ECE. It showcases a variety of labs and a comprehensive end-of-year project. The main project involves developing a web application using a chosen programming language, incorporating a database for data storage, and ensuring quality through various levels of testing.
+Access our project website deployed on Microsoft Azure: [HLZ Project](https://hlz-project.azurewebsites.net/).
 
-  
+## Features
+
+- **Programming Language:** Node.js
+- **Database:** Redis
+- **Functionality:** CRUD operations for user management
+- **Test Levels:** Unit, API, Configuration, Connection
 
 ## Installation
 
-  
+Clone the repository and navigate to its directory:
 
-To install the project, clone the repository and navigate into its directory:
 
 ```
 git clone https://github.com/marcolap13/ece-devops-2023-Grp3-HAN-LA-ZOUCH.git
@@ -29,16 +31,20 @@ git clone https://github.com/marcolap13/ece-devops-2023-Grp3-HAN-LA-ZOUCH.git
 
 To get the project up and running, follow these steps:
 
-1. Install Dependencies:
+1. **Install Dependencies:**
 
 ```
 npm install
 
 ```
 
-2. Start the Application:
+2. **Start the Application:**
 
-  
+First, navigate to the project (userapi) directory:
+
+```
+cd userapi
+```
 
 To launch the application locally:
 
@@ -47,7 +53,7 @@ npm start
 
 ```
 
-3. Running Tests:
+3. **Running Tests:**
 
   
 
@@ -59,9 +65,30 @@ npm test
 ```
 
 
-After doing these command you can go to the url : https://localhost:3000
+After doing these command you can go to the url : https://localhost:8080
 
+# CI/CD with Azure
+
+We have implemented CI/CD using Azure.
+
+The application is deployed at https://hlz-project.azurewebsites.net/. 
+
+Azure Redis is utilized, and sensitive information such as .env files are stored securely in the GitHub secret environment.
   
+  
+  
+# Infrastructure as Code (IaC) Configuration with Vagrant and Ansible
+
+## Configure and Provision a Virtual Environment
+
+Set up and run your application in a virtual environment using Vagrant for configuration and Ansible for provisioning. 
+
+#### Vagrant Configuration
+- **Goal:** Create 1 Virtual Machine (VM) running on any Linux distribution.
+- **Steps:**
+  1. Install Vagrant on your system.
+  2. Create a `Vagrantfile` to define the VM configuration.
+
 
 # Kubernetes Setup Guide with Minikube
 
@@ -69,6 +96,7 @@ After doing these command you can go to the url : https://localhost:3000
 
 This guide explains how to install and run a local Kubernetes cluster using Minikube.
 
+Note: We use Secret.yaml to securely manage sensitive information since we are connected to REDIS_AZURE. This file contains important data from the .env file, eliminating the need for using persistent volumes (pv) and persistent volume claims (pvc) as we are not using Redis locally.
   
 
 ## Prerequisites
@@ -140,6 +168,9 @@ minikube  service  my-app-service
 ```
 minikube  stop
 ```
+
+
+
   
   
 
