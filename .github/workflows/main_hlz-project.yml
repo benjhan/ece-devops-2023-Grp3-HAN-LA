@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: userapi
+        working-directory: userapi_with_REDIS_AZURE
 
     steps:
       - uses: actions/checkout@v4
