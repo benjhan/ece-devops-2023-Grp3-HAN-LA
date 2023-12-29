@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      AZURE_CACHE_FOR_REDIS_HOST_NAME: LHZ-Project.redis.cache.windows.net
+      AZURE_CACHE_FOR_REDIS_ACCESS_KEY: Grqu49KVValz7fbU7WmKT60TxZSA1JMrnAzCaP2tQ9I=
+      PORT: 3000

@@ -1,0 +1,147 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Form</title>
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+    <div class="form-container">
+      <form id="createForm">
+        <h1>Create a User</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+        <br />
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required />
+        <br />
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required />
+        <br />
+        <button type="button" onclick="createUser()">Submit</button>
+        <div id="createMessage"></div>
+      </form>
+
+      <form id="searchForm">
+        <h1>Search for a User</h1>
+        <label for="searchUsername">Search by Username:</label>
+        <input type="text" id="searchUsername" name="searchUsername" required />
+        <button type="button" onclick="searchUser()">Search</button>
+        <div id="searchResults"></div>
+      </form>
+
+      <form id="deleteForm">
+        <h1>Delete a User</h1>
+        <label for="deleteUsername">Username to Delete:</label>
+        <input type="text" id="deleteUsername" name="deleteUsername" required />
+        <button type="button" onclick="deleteUser()">Delete</button>
+        <div id="deleteMessage"></div>
+      </form>
+
+      <form id="updateForm">
+        <h1>Update User</h1>
+        <label for="updateUsername">Username to Update:</label>
+        <input type="text" id="updateUsername" name="updateUsername" required />
+        <br />
+        <label for="newFirstname">New First Name:</label>
+        <input type="text" id="newFirstname" name="newFirstname" required />
+        <br />
+        <label for="newLastname">New Last Name:</label>
+        <input type="text" id="newLastname" name="newLastname" required />
+        <br />
+        <button type="button" onclick="updateUser()">Update</button>
+        <div id="updateMessage"></div>
+      </form>
+    </div>
+
+    <script>
+      function createUser() {
+        const username = document.getElementById("username").value;
+        const firstname = document.getElementById("firstname").value;
+        const lastname = document.getElementById("lastname").value;
+
+        fetch("/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            firstname: firstname,
+            lastname: lastname,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const createMessage = document.getElementById("createMessage");
+            createMessage.innerHTML =
+              data.status === "success"
+                ? "User created successfully."
+                : data.msg;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function searchUser() {
+        const searchUsername = document.getElementById("searchUsername").value;
+        fetch(`/user/${searchUsername}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const searchResults = document.getElementById("searchResults");
+            searchResults.innerHTML = JSON.stringify(data, null, 2);
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function deleteUser() {
+        const deleteUsername = document.getElementById("deleteUsername").value;
+        fetch(`/user/${deleteUsername}`, {
+          method: "DELETE",
+          cache: "no-store",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const deleteMessage = document.getElementById("deleteMessage");
+            if (data.status === "success") {
+              if (data.msg === "User not found") {
+                deleteMessage.innerHTML = "User not found.";
+              } else {
+                deleteMessage.innerHTML = "User deleted successfully.";
+              }
+            } else {
+              deleteMessage.innerHTML = data.msg;
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function updateUser() {
+        const updateUsername = document.getElementById("updateUsername").value;
+        const newFirstname = document.getElementById("newFirstname").value;
+        const newLastname = document.getElementById("newLastname").value;
+
+        fetch(`/user/${updateUsername}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstname: newFirstname,
+            lastname: newLastname,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const updateMessage = document.getElementById("updateMessage");
+            updateMessage.innerHTML =
+              data.status === "success"
+                ? "User updated successfully."
+                : data.msg;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>
