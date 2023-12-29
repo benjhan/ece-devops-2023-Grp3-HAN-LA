@@ -1,0 +1,70 @@
+name: CI
+
+on: [push]
+
+jobs:
+ build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: project/backend
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'project/backend/package-lock.json'
+    - run: npm ci
+    - run: npm run build --if-present
+
+    - name: Debug Information
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Contents of project/backend: $(ls -al ${GITHUB_WORKSPACE}/project/backend)"
+
+
+    - name: Start MySQL Service
+      run: sudo service mysql start
+
+    - name: Set up MySQL
+      run: |
+        mysql -e 'CREATE DATABASE test;' -uroot -proot
+
+    - name: Set MySQL Host and Port
+      id: set-mysql-host-port
+      run: |
+        echo "MYSQL_HOST=127.0.0.1" >> $GITHUB_ENV
+        echo "MYSQL_PORT=$(echo ${{ job.services.mysql.ports['3306'] }})" >> $GITHUB_ENV
+
+    - name: Verify MySQL connection
+      run: |
+        mysql --version
+        echo "MySQL Host: ${{ env.MYSQL_HOST }}"
+        echo "MySQL Port: ${{ env.MYSQL_PORT }}"
+        mysql --host ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -uroot -proot -e "SHOW DATABASES"
+    - name: Create MySQL Table
+      run: |
+        mysql --host ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -uroot -proot test < create_table.sql
+
+    - name: Run Tests
+      run: | 
+        npm test
+
+
