@@ -1,3 +1,11 @@
+.main-header {
+    font-size: 2em; /* Adjust the size as needed */
+    text-align: center;
+    margin-top: 20px;
+    color: #333; /* Adjust the color as needed */
+  }
+  
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;

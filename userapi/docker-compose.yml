@@ -4,15 +4,19 @@ services:
   app:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       REDIS_HOST: redis
-      REDIS_PORT: 6380
+      REDIS_PORT: 6379
     depends_on:
+      - redis
+    links:
       - redis
 
   redis:
     image: redis:latest
-    command: ["redis-server", "--bind", "0.0.0.0", "--port", "6380"]
+    command: ["redis-server", "--bind", "0.0.0.0", "--port", "6379"]
+    ports:
+      - "6379:6379"
