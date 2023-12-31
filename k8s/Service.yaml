@@ -12,11 +12,10 @@ spec:
   type: NodePort
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: mon-redis
+  name: redis-service
 spec:
   selector:
     app: redis
