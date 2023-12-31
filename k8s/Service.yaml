@@ -3,22 +3,25 @@ kind: Service
 metadata:
   name: hlz-app-service
 spec:
-  type: NodePort
-  ports:
-    - port: 12345
-      targetPort: 3000
-      nodePort: 30001
   selector:
-    app: hlz-app
+    app: hlz-app 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: NodePort
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  name: mon-redis
 spec:
-  ports:
-    - port: 6379
-      targetPort: 6379
   selector:
     app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: NodePort

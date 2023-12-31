@@ -13,15 +13,15 @@ spec:
         app: hlz-app
     spec:
       containers:
-        - name: hlz-app
-          image: marcolap13/redis_app  # Mettez à jour l'étiquette ici
-          ports:
-            - containerPort: 3000
-          env:
-            - name: REDIS_HOST
-              value: redis-service
-            - name: REDIS_PORT
-              value: "6379"
+      - name: hlz-app
+        image: marcolap13/userapi_redis:latest
+        ports:
+        - containerPort: 3000
+        env:
+          - name: REDIS_HOST
+            value: "mon-redis"
+          - name: REDIS_PORT
+            value: "6379"
 
 ---
 apiVersion: apps/v1
@@ -39,14 +39,14 @@ spec:
         app: redis
     spec:
       containers:
-        - name: redis
-          image: redis:latest
-          ports:
-            - containerPort: 6379
-          volumeMounts:
-            - mountPath: /data
-              name: redis-data
-      volumes:
+      - name: redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+        volumeMounts:
         - name: redis-data
-          persistentVolumeClaim:
-            claimName: redis-pvc
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
