@@ -21,7 +21,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: userapi_with_REDIS_DOCKER
+        working-directory: userapi
         
     steps:
     - uses: actions/checkout@v2
