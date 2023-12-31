@@ -7,8 +7,9 @@ const app = express();
 const port =  3000;
 
 const db = require('./dbClient');
+
 db.on('error', (err) => {
-    console.error(err);
+  console.error('Error using Redis client:', err);
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
