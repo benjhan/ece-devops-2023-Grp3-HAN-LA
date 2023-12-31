@@ -4,6 +4,8 @@
 
 This repository showcases the work and projects completed by Group 3 for the DevOps course in our ING4 year at ECE. It includes a range of labs and a comprehensive end-of-year project that involves developing a web application using a specific programming language, implementing a database for data storage, and ensuring quality through multiple testing levels.
 
+Moreover, we followed the organization's template, implementing additional features such as **Azure Cache for Redis** (in **userapi_with_REDIS_AZURE** and also in **k8s_with_REDIS_AZURE**), earning bonus points. This enhancement allows for potential database linking across different application launch methods !
+
 Access our project website deployed on Microsoft Azure: [HLZ Project](https://hlz-project.azurewebsites.net/).
 
 ## Features
@@ -419,6 +421,11 @@ note: It's noteworthy that with Kubernetes (K8s) or Docker Compose using this me
 We have integrated **GitKraken** into our workflow, utilizing its powerful features to enhance collaboration and streamline version control. GitKraken has proven to be an invaluable tool for us, all along the project !
 
 ![gitkraken](images/gitkraken.png)
+
+In addition to our version control and collaboration tools, we have leveraged the **monitoring** and management capabilities of Microsoft Azure to oversee our application's performance and health. Azure's comprehensive monitoring solutions allow us to track our application's operations, assess its performance in real-time, and troubleshoot any issues proactively. This feature of Azure ensures high availability and reliability of our project.
+
+![monitoring_azure](images/monitoring_azure.png)
+
 
 
 ## Authors
